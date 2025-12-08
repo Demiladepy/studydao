@@ -30,6 +30,8 @@ model User {
   attendance    Attendance[]
   contributions Contribution[]
   transactions  Transaction[]
+  studySessions  StudySession[]
+  studyGoals    StudyGoal[]
 
   @@index([email])
   @@index([university])
@@ -42,8 +44,9 @@ model Course {
   university String
   createdAt  DateTime @default(now())
 
-  users  UserCourse[]
-  groups StudyGroup[]
+  users         UserCourse[]
+  groups        StudyGroup[]
+  studySessions StudySession[]
 
   @@unique([code, university])
   @@index([university])
@@ -192,4 +195,44 @@ model Perk {
 
   @@index([category])
   @@index([tier])
+}
+
+model StudySession {
+  id          String   @id @default(cuid())
+  userId      String
+  courseId    String?
+  duration    Int       @default(0) // Duration in minutes
+  startedAt   DateTime
+  endedAt     DateTime?
+  status      String   @default("active") // active, completed, paused
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course? @relation(fields: [courseId], references: [id])
+
+  @@index([userId])
+  @@index([startedAt])
+  @@index([status])
+}
+
+model StudyGoal {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // daily, weekly, monthly
+  targetHours Int
+  currentHours Float   @default(0)
+  periodStart DateTime
+  periodEnd   DateTime
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([periodStart])
+  @@index([periodEnd])
+  @@index([type])
 }

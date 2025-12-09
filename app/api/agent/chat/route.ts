@@ -10,9 +10,12 @@ export async function POST(request: NextRequest) {
     // Get authenticated user
     const session = await getServerSession(authOptions);
 
+    console.log("Session:", JSON.stringify(session, null, 2));
+
     if (!session || !session.user?.id) {
+      console.error("Auth failed - Session:", session, "User ID:", session?.user?.id);
       return NextResponse.json(
-        { error: "Unauthorized. Please log in." },
+        { error: "Unauthorized. Please log in again to refresh your session." },
         { status: 401 }
       );
     }
@@ -38,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     // Format message with user context and active session info
     let contextualMessage = formatMessageWithContext(message, context);
-    
+
     if (activeSession) {
       const elapsed = Math.floor((new Date().getTime() - activeSession.startedAt.getTime()) / 1000 / 60);
       contextualMessage += `\n\nActive Session Info: The user currently has an active study session that started ${elapsed} minutes ago.`;
@@ -54,8 +57,8 @@ export async function POST(request: NextRequest) {
     const response = await runner.ask(contextualMessage);
 
     // Extract response text - runner.ask() returns a string by default
-    const responseText = typeof response === "string" 
-      ? response 
+    const responseText = typeof response === "string"
+      ? response
       : "I'm here to help with your studies!";
 
     // Get updated active session status

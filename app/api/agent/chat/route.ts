@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { formatMessageWithContext, getOrCreateContext } from "@/lib/agent/utils";
 import { getActiveSession } from "@/lib/agent/db-helpers";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,10 +13,34 @@ export async function POST(request: NextRequest) {
 
     console.log("Session:", JSON.stringify(session, null, 2));
 
-    if (!session || !session.user?.id) {
-      console.error("Auth failed - Session:", session, "User ID:", session?.user?.id);
+    if (!session || !session.user) {
+      console.error("No session found");
       return NextResponse.json(
         { error: "Unauthorized. Please log in again to refresh your session." },
+        { status: 401 }
+      );
+    }
+
+    // Get user ID - either from session or lookup by email
+    let userId = (session.user as any).id;
+
+    if (!userId && session.user.email) {
+      console.log("User ID not in session, looking up by email:", session.user.email);
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: { id: true }
+      });
+
+      if (user) {
+        userId = user.id;
+        console.log("Found user ID:", userId);
+      }
+    }
+
+    if (!userId) {
+      console.error("Could not determine user ID");
+      return NextResponse.json(
+        { error: "User ID not found. Please log out and log back in." },
         { status: 401 }
       );
     }
@@ -31,10 +56,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Get or create conversation context
-    const context = getOrCreateContext(session.user.id, conversationId);
+    const context = getOrCreateContext(userId, conversationId);
 
     // Check for active session to include in context
-    const activeSession = await getActiveSession(session.user.id);
+    const activeSession = await getActiveSession(userId);
 
     // Create agent instance
     const { runner } = await createStudyAgent();
@@ -62,7 +87,7 @@ export async function POST(request: NextRequest) {
       : "I'm here to help with your studies!";
 
     // Get updated active session status
-    const updatedActiveSession = await getActiveSession(session.user.id);
+    const updatedActiveSession = await getActiveSession(userId);
 
     return NextResponse.json({
       response: responseText,
@@ -86,4 +111,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

@@ -9,7 +9,7 @@ const registerSchema = z.object({
     name: z.string().min(2),
     university: z.string().min(2),
     courses: z.array(z.string()).optional(),
-    learningStyle: z.enum(['visual', 'auditory', 'kinesthetic', 'reading']).optional(),
+    learningStyle: z.enum(['visual', 'auditory', 'kinesthetic', 'reading', 'reading/writing']).optional(),
     goals: z.string().optional(),
     location: z.string().optional(),
     availability: z.array(z.object({

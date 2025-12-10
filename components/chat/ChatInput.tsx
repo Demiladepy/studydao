@@ -17,7 +17,7 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
 
     const message = input.trim();
     setInput("");
-    
+
     // Reset textarea height
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -42,35 +42,119 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
   }, [input]);
 
   return (
-    <div className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3">
-      <div className="flex items-end gap-2 max-w-4xl mx-auto">
-        <div className="flex-1 relative">
+    <div style={{
+      borderTop: '1px solid var(--color-border)',
+      background: 'var(--color-background)',
+      padding: 'var(--space-6) var(--space-8)'
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-end',
+        gap: 'var(--space-3)',
+        maxWidth: '900px',
+        margin: '0 auto'
+      }}>
+        <div style={{ flex: 1, position: 'relative' }}>
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
+            placeholder="Type your message... (Shift + Enter for new line)"
             disabled={isLoading || disabled}
             rows={1}
-            className="w-full px-3 py-2.5 pr-10 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ minHeight: "40px", maxHeight: "120px" }}
+            style={{
+              width: '100%',
+              padding: 'var(--space-4)',
+              paddingRight: 'var(--space-12)',
+              borderRadius: 'var(--radius-xl)',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-surface-elevated)',
+              fontSize: 'var(--font-size-base)',
+              color: 'var(--color-text-primary)',
+              fontFamily: 'var(--font-family)',
+              lineHeight: 'var(--line-height-normal)',
+              resize: 'none',
+              overflow: 'hidden',
+              outline: 'none',
+              transition: 'all var(--transition-fast)',
+              minHeight: '52px',
+              maxHeight: '160px'
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-primary)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px var(--color-primary-light)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
           />
+
+          {/* Character hint */}
+          {input.length > 0 && (
+            <div style={{
+              position: 'absolute',
+              bottom: 'var(--space-2)',
+              right: 'var(--space-3)',
+              fontSize: 'var(--font-size-xs)',
+              color: 'var(--color-text-tertiary)',
+              pointerEvents: 'none'
+            }}>
+              {input.length}
+            </div>
+          )}
         </div>
+
         <button
           onClick={handleSend}
           disabled={!input.trim() || isLoading || disabled}
-          className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg text-sm font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 min-w-[72px]"
+          style={{
+            padding: 'var(--space-4)',
+            background: !input.trim() || isLoading || disabled
+              ? 'var(--color-surface)'
+              : 'var(--color-primary)',
+            color: !input.trim() || isLoading || disabled
+              ? 'var(--color-text-disabled)'
+              : 'white',
+            border: 'none',
+            borderRadius: 'var(--radius-xl)',
+            fontSize: 'var(--font-size-sm)',
+            fontWeight: 'var(--font-weight-medium)',
+            cursor: !input.trim() || isLoading || disabled ? 'not-allowed' : 'pointer',
+            transition: 'all var(--transition-base)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '52px',
+            height: '52px',
+            boxShadow: !input.trim() || isLoading || disabled ? 'none' : 'var(--shadow-md)',
+            opacity: !input.trim() || isLoading || disabled ? 0.5 : 1
+          }}
+          onMouseEnter={(e) => {
+            if (!(!input.trim() || isLoading || disabled)) {
+              e.currentTarget.style.background = 'var(--color-primary-hover)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!(!input.trim() || isLoading || disabled)) {
+              e.currentTarget.style.background = 'var(--color-primary)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+            }
+          }}
         >
           {isLoading ? (
             <svg
-              className="animate-spin h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
+              style={{ width: '20px', height: '20px' }}
+              className="animate-spin"
               fill="none"
               viewBox="0 0 24 24"
             >
               <circle
-                className="opacity-25"
+                style={{ opacity: 0.25 }}
                 cx="12"
                 cy="12"
                 r="10"
@@ -78,14 +162,14 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
                 strokeWidth="4"
               ></circle>
               <path
-                className="opacity-75"
+                style={{ opacity: 0.75 }}
                 fill="currentColor"
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
           ) : (
             <svg
-              className="h-4 w-4"
+              style={{ width: '20px', height: '20px' }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -100,7 +184,48 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
           )}
         </button>
       </div>
+
+      {/* Quick suggestions when empty */}
+      {input.length === 0 && (
+        <div style={{
+          display: 'flex',
+          gap: 'var(--space-2)',
+          marginTop: 'var(--space-3)',
+          maxWidth: '900px',
+          margin: 'var(--space-3) auto 0',
+          flexWrap: 'wrap'
+        }}>
+          {['Start studying', 'Show my progress', 'Set a goal'].map((suggestion) => (
+            <button
+              key={suggestion}
+              onClick={() => setInput(suggestion)}
+              style={{
+                padding: 'var(--space-2) var(--space-3)',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-full)',
+                fontSize: 'var(--font-size-xs)',
+                color: 'var(--color-text-secondary)',
+                cursor: 'pointer',
+                transition: 'all var(--transition-fast)',
+                fontWeight: 'var(--font-weight-medium)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--color-primary-light)';
+                e.currentTarget.style.borderColor = 'var(--color-primary)';
+                e.currentTarget.style.color = 'var(--color-primary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'var(--color-surface)';
+                e.currentTarget.style.borderColor = 'var(--color-border)';
+                e.currentTarget.style.color = 'var(--color-text-secondary)';
+              }}
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
-

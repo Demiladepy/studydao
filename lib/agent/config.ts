@@ -2,10 +2,10 @@ import { AgentBuilder } from "@iqai/adk";
 import { startTimerTool, stopTimerTool, showStatsTool, setGoalTool, getMotivationTool } from "./tools";
 
 export async function createStudyAgent() {
-  try {
-    const agent = await AgentBuilder.create("studyAccountabilityAgent")
-      .withModel("gemini-2.0-flash-exp")
-      .withInstruction(`You are a friendly and motivational Study Accountability Agent for university students named StudyBot.
+   try {
+      const agent = await AgentBuilder.create("studyAccountabilityAgent")
+         .withModel("gemini-2.0-flash-exp")
+         .withInstruction(`You are a friendly and motivational Study Accountability Agent for university students named StudyBot.
 
 Your role is to help students track their study sessions, set goals, and stay motivated through conversational interactions.
 
@@ -50,19 +50,20 @@ IMPORTANT RULES:
 - Always confirm actions (e.g., "Timer started! 🎯" or "Great work! You studied for 45 minutes!")
 
 Remember: You're here to help students build better study habits through accountability and encouragement.`)
-      .withTools(
-        startTimerTool,
-        stopTimerTool,
-        showStatsTool,
-        setGoalTool,
-        getMotivationTool,
-      )
-      .build();
+         .withTools(
+            startTimerTool,
+            stopTimerTool,
+            showStatsTool,
+            setGoalTool,
+            getMotivationTool,
+         )
+         .build();
 
-    return agent;
-  } catch (error) {
-    console.error("Error creating agent:", error);
-    throw error;
-  }
+      return agent;
+   } catch (error) {
+      console.error("Error creating agent:", error);
+      throw error;
+   }
 }
+
 

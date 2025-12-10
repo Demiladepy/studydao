@@ -31,11 +31,32 @@ export default function ChatPage() {
 
   if (status === "loading") {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        background: 'var(--color-surface)'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            border: '3px solid var(--color-border)',
+            borderTopColor: 'var(--color-primary)',
+            borderRadius: '50%',
+            margin: '0 auto var(--space-4)',
+            animation: 'spin 0.8s linear infinite'
+          }}></div>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)' }}>
+            Loading chat...
+          </p>
         </div>
+        <style jsx>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
     );
   }
@@ -45,59 +66,143 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div style={{ display: 'flex', height: '100vh', background: 'var(--color-surface)', overflow: 'hidden' }}>
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
-        <div className="p-6">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-lg">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <aside style={{
+        width: '280px',
+        background: 'var(--color-background)',
+        borderRight: '1px solid var(--color-border)',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        {/* Logo */}
+        <div style={{ padding: 'var(--space-8) var(--space-6)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--color-primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: 'var(--shadow-md)'
+            }}>
+              <svg style={{ width: '20px', height: '20px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h1 className="text-xl font-bold text-gray-900">StudyDAO</h1>
+            <h1 style={{
+              fontSize: 'var(--font-size-xl)',
+              fontWeight: 'var(--font-weight-bold)',
+              color: 'var(--color-text-primary)'
+            }}>
+              StudyDAO
+            </h1>
           </div>
+        </div>
 
-          <nav className="space-y-1">
-            <Link href="/dashboard">
-              <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Navigation */}
+        <nav style={{ padding: '0 var(--space-4)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+            <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+              <button style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
+                padding: 'var(--space-3) var(--space-4)',
+                borderRadius: 'var(--radius-lg)',
+                background: 'transparent',
+                color: 'var(--color-text-secondary)',
+                border: 'none',
+                fontWeight: 'var(--font-weight-medium)',
+                fontSize: 'var(--font-size-sm)',
+                cursor: 'pointer',
+                transition: 'all var(--transition-fast)',
+                width: '100%',
+                textAlign: 'left'
+              }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--color-surface)';
+                  e.currentTarget.style.color = 'var(--color-text-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'var(--color-text-secondary)';
+                }}>
+                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
                 Dashboard
               </button>
             </Link>
-            <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg bg-purple-50 text-purple-700 font-medium">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+            <button style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-3)',
+              padding: 'var(--space-3) var(--space-4)',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--color-primary-light)',
+              color: 'var(--color-primary)',
+              border: 'none',
+              fontWeight: 'var(--font-weight-medium)',
+              fontSize: 'var(--font-size-sm)',
+              cursor: 'pointer',
+              width: '100%',
+              textAlign: 'left'
+            }}>
+              <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
               Chat Agent
             </button>
-          </nav>
-        </div>
+          </div>
+        </nav>
 
-        {/* Stats Sidebar Component */}
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
+        {/* Stats Sidebar */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-6) var(--space-4)', marginTop: 'var(--space-6)' }}>
           <StatsSidebar />
         </div>
       </aside>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col h-full bg-white">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-background)' }}>
         {/* Header */}
-        <header className="border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <header style={{
+          borderBottom: '1px solid var(--color-border)',
+          padding: 'var(--space-6) var(--space-8)',
+          background: 'var(--color-background)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: 'var(--radius-xl)',
+                background: 'linear-gradient(135deg, var(--color-primary) 0%, #0d47a1 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: 'var(--shadow-md)'
+              }}>
+                <svg style={{ width: '24px', height: '24px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">
+                <h1 style={{
+                  fontSize: 'var(--font-size-xl)',
+                  fontWeight: 'var(--font-weight-bold)',
+                  color: 'var(--color-text-primary)',
+                  marginBottom: 'var(--space-1)'
+                }}>
                   Study Agent
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p style={{
+                  fontSize: 'var(--font-size-sm)',
+                  color: 'var(--color-text-secondary)'
+                }}>
                   Your AI study companion
                 </p>
               </div>
@@ -107,54 +212,136 @@ export default function ChatPage() {
 
         {/* Timer Display */}
         {activeSession && (
-          <div className="px-6 pt-4">
+          <div style={{ padding: '0 var(--space-8)', paddingTop: 'var(--space-6)' }}>
             <TimerDisplay activeSession={activeSession} />
           </div>
         )}
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto px-6 py-6">
-          <div className="max-w-4xl mx-auto">
+        <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-8)' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
             {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center py-12">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center mb-6 shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                padding: 'var(--space-16) var(--space-6)',
+                minHeight: '60vh'
+              }} className="animate-fade-in">
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: 'var(--radius-xl)',
+                  background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 'var(--space-8)',
+                  boxShadow: 'var(--shadow-lg)'
+                }}>
+                  <svg style={{ width: '40px', height: '40px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                <h2 style={{
+                  fontSize: 'var(--font-size-3xl)',
+                  fontWeight: 'var(--font-weight-bold)',
+                  color: 'var(--color-text-primary)',
+                  marginBottom: 'var(--space-4)',
+                  letterSpacing: '-0.01em'
+                }}>
                   Welcome to Study Agent
                 </h2>
-                <p className="text-gray-600 max-w-md mb-8">
+                <p style={{
+                  fontSize: 'var(--font-size-lg)',
+                  color: 'var(--color-text-secondary)',
+                  maxWidth: '500px',
+                  marginBottom: 'var(--space-10)',
+                  lineHeight: 'var(--line-height-relaxed)'
+                }}>
                   I can help you track study sessions, set goals, and stay motivated on your learning journey.
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl">
-                  <div className="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center mb-3">
-                      <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                {/* Suggestion Cards */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                  gap: 'var(--space-4)',
+                  width: '100%',
+                  maxWidth: '900px'
+                }}>
+                  <div className="card card-interactive" style={{ padding: 'var(--space-6)', textAlign: 'left' }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: 'var(--radius-lg)',
+                      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 'var(--space-4)',
+                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
+                    }}>
+                      <svg style={{ width: '24px', height: '24px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <p className="font-semibold text-gray-900 mb-1">Start Studying</p>
-                    <p className="text-sm text-gray-600">"start studying math"</p>
+                    <p style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-primary)', marginBottom: 'var(--space-2)', fontSize: 'var(--font-size-base)' }}>
+                      Start Studying
+                    </p>
+                    <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-tertiary)' }}>
+                      "start studying math"
+                    </p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center mb-3">
-                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                  <div className="card card-interactive" style={{ padding: 'var(--space-6)', textAlign: 'left' }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: 'var(--radius-lg)',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 'var(--space-4)',
+                      boxShadow: '0 4px 12px rgba(139, 92, 246, 0.2)'
+                    }}>
+                      <svg style={{ width: '24px', height: '24px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
                     </div>
-                    <p className="font-semibold text-gray-900 mb-1">View Progress</p>
-                    <p className="text-sm text-gray-600">"show my progress"</p>
+                    <p style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-primary)', marginBottom: 'var(--space-2)', fontSize: 'var(--font-size-base)' }}>
+                      View Progress
+                    </p>
+                    <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-tertiary)' }}>
+                      "show my progress"
+                    </p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center mb-3">
-                      <svg className="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                  <div className="card card-interactive" style={{ padding: 'var(--space-6)', textAlign: 'left' }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: 'var(--radius-lg)',
+                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 'var(--space-4)',
+                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                    }}>
+                      <svg style={{ width: '24px', height: '24px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <p className="font-semibold text-gray-900 mb-1">Set Goals</p>
-                    <p className="text-sm text-gray-600">"I want to study 3 hours today"</p>
+                    <p style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-primary)', marginBottom: 'var(--space-2)', fontSize: 'var(--font-size-base)' }}>
+                      Set Goals
+                    </p>
+                    <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-tertiary)' }}>
+                      "I want to study 3 hours today"
+                    </p>
                   </div>
                 </div>
               </div>
